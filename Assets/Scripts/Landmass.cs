@@ -25,8 +25,8 @@ public class Landmass : MonoBehaviour
         terrain.terrainData = GenerateTerrainData(terrain.terrainData);
         
         // Make it animate.
-        offsetX += Time.deltaTime * 2.5f;
-        offsetY += Time.deltaTime * 2.5f;
+        // offsetX += Time.deltaTime * 2.5f;
+        // offsetY += Time.deltaTime * 2.5f;
     }
 
     private TerrainData GenerateTerrainData(TerrainData terrainData)

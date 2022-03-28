@@ -46,8 +46,7 @@ public class MeshGenerator : MonoBehaviour
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
         triangles = new int[xSize * zSize * 6];
 
-        int i = 0;
-        for (int z = 0; z <= zSize; z++)
+        for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x <= xSize; x++)
             {
@@ -66,17 +65,21 @@ public class MeshGenerator : MonoBehaviour
         {
             for (int x = 0; x < xSize; x++)
             {
+                
+                // This janky code is to go over all the vertices one-by-one.
+                // However, the triangles have vertices in multiple rows in the 2d array,
+                // So we sometimes need xSize to make that little hop.
                 triangles[triangle + 0] = vertice + 0;
                 triangles[triangle + 1] = vertice + xSize + 1;
                 triangles[triangle + 2] = vertice +1;
                 triangles[triangle + 3] = vertice + 1;
                 triangles[triangle + 4] = vertice + xSize + 1;
                 triangles[triangle + 5] = vertice + xSize + 2;
-
+        
                 vertice++;
                 triangle += 6;
             }
-
+        
             vertice++;
         }
         

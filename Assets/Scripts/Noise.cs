@@ -24,21 +24,23 @@ public class Noise : MonoBehaviour
 
     private void Start()
     {
-        // Make it Random by using an offset.
-        offsetX = 0.05f;
-        
-        
         _renderer = GetComponent<Renderer>();
     }
 
     private void Update()
     {
-        // offsetX += 5;
-        offsetY += 0.1f;
-        _renderer.material.mainTexture = Generate(true);
+        // Generate something completely random.
+        // _renderer.material.mainTexture = RandomGenerate();
+        
+        // Generate something using Noise.
+         _renderer.material.mainTexture = Generate();
+        
+        // Make it move.
+        // offsetX += 5; // Fast
+        // offsetY += 0.1f; // Slow
     }
 
-    Texture2D Generate(bool offset)
+    Texture2D Generate()
     {
         Texture2D texture2D = new Texture2D(width, height);
         
@@ -47,7 +49,7 @@ public class Noise : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                texture2D.SetPixel(x, y, Pixel(x, y, offset));
+                texture2D.SetPixel(x, y, Pixel(x, y));
             }
         }
 
@@ -57,30 +59,39 @@ public class Noise : MonoBehaviour
         return texture2D;
     }
 
-    Color Pixel(int x, int y, bool offset)
+    Color Pixel(int x, int y)
     {
         float xCoord = (float) x / width * scale;
         float yCoord = (float) y / height * scale;
 
         // Offset makes the coordinates random, instead of always yielding the same result.
-        if (offset)
-        {
-            xCoord += offsetX;
-            yCoord += offsetY;
-        }
-        
+        xCoord += offsetX;
+        yCoord += offsetY;
+
+        // The closer the value to 0.5, 'intenser' the noise. (black, compared to grey - white).
+        float pixel = Mathf.PerlinNoise(xCoord, yCoord);
+
+        return new Color(pixel, pixel, pixel);
+    }
+
+    Color PixelWater(int x, int y)
+    {
+        float xCoord = (float) x / width * scale;
+        float yCoord = (float) y / height * scale;
+
+        // Offset makes the coordinates random, instead of always yielding the same result.
+        xCoord += offsetX;
+        yCoord += offsetY;
+
         // The closer the value to 0.5, 'intenser' the noise. (black, compared to grey - white).
         float pixel = Mathf.PerlinNoise(xCoord, yCoord);
 
         if (pixel > 0.45 && pixel < 0.55)
         {
             return Color.white;
-            
         }
         
         return new Color(0, 0, 255);
-
-        // return new Color(pixel, pixel, pixel);
     }
 
     Texture2D RandomGenerate()
